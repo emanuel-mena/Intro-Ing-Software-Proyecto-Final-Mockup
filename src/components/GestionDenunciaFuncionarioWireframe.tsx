@@ -3,12 +3,14 @@ import { ArrowLeft } from "lucide-react";
 interface GestionDenunciaFuncionarioWireframeProps {
   onBack?: () => void;
   onSaveChanges?: () => void;
+  onViewHistory?: () => void;
   showFrameMeta?: boolean;
 }
 
 export function GestionDenunciaFuncionarioWireframe({
   onBack,
   onSaveChanges,
+  onViewHistory,
   showFrameMeta = true
 }: GestionDenunciaFuncionarioWireframeProps) {
   const denuncia = {
@@ -174,6 +176,12 @@ export function GestionDenunciaFuncionarioWireframe({
                 className="w-full h-12 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors"
               >
                 Guardar cambios
+              </button>
+              <button
+                onClick={onViewHistory}
+                className="w-full h-12 border-2 border-gray-400 text-gray-800 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Ver historial / cambios
               </button>
               <button
                 onClick={onBack}

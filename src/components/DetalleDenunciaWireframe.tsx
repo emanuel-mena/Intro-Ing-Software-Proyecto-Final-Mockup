@@ -71,202 +71,169 @@ export function DetalleDenunciaWireframe({
   };
 
   return (
-    <div className="w-full h-full flex flex-col">
-      {/* Frame label (fuera de la “pantalla”) */}
+    <div className="space-y-6">
       {showFrameMeta && (
-        <div className="mb-4 text-center">
-          <span className="text-sm text-gray-400">
-            DetalleDenuncia_ComuniApp
-          </span>
-        </div>
+        <p className="text-sm text-gray-500">DetalleDenuncia_ComuniApp</p>
       )}
 
-      {/* Contenido principal dentro del “teléfono” */}
-      <div className="flex-1 px-4 py-4">
-        <div className="bg-white rounded-lg shadow-sm border-2 border-gray-300">
-          {/* Top bar */}
-          <div className="border-b-2 border-gray-300 px-4 py-4 flex items-center bg-gray-50">
-            <button
-              onClick={onBack}
-              className="w-8 h-8 border-2 border-gray-400 rounded flex items-center justify-center hover:bg-gray-100 transition-colors mr-3"
-            >
-              <ArrowLeft className="w-4 h-4 text-gray-600" />
-            </button>
-            <h2 className="m-0">Detalle de denuncia</h2>
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onBack}
+            className="w-10 h-10 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 text-gray-700" />
+          </button>
+          <div>
+            <p className="text-sm text-gray-500 m-0">Detalle</p>
+            <h1 className="text-2xl font-semibold text-gray-900 m-0">
+              Información de denuncia
+            </h1>
           </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={onAddComment}
+            className="px-4 py-2 rounded-lg bg-gray-900 text-white hover:bg-gray-800 transition-colors flex items-center gap-2"
+          >
+            <MessageSquare className="w-4 h-4" />
+            Agregar comentario
+          </button>
+          <button
+            onClick={onAddEvidence}
+            className="px-4 py-2 rounded-lg border border-gray-300 text-gray-800 hover:bg-gray-50 transition-colors flex items-center gap-2"
+          >
+            <Upload className="w-4 h-4" />
+            Agregar evidencia
+          </button>
+        </div>
+      </div>
 
-          {/* Content */}
-          <div className="p-4 space-y-6">
-            {/* Complaint header */}
-            <div className="pb-4 border-b-2 border-gray-200">
-              <div className="flex items-start justify-between mb-3">
-                <h1 className="flex-1 m-0">{complaint.title}</h1>
-                <span
-                  className={`inline-block px-3 py-1 rounded text-xs border ml-3 ${getStatusStyle(
-                    complaint.status
-                  )}`}
-                >
-                  {complaint.status}
-                </span>
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2 space-y-6">
+          <div className="border border-gray-200 rounded-xl bg-white p-6 shadow-sm space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900 m-0">
+                  {complaint.title}
+                </h2>
+                <p className="text-sm text-gray-500 m-0">
+                  Creada el {complaint.createdDate} · ID #{complaint.id}
+                </p>
               </div>
-              <p className="text-sm text-gray-500 m-0">
-                Creada el {complaint.createdDate} · ID #{complaint.id}
-              </p>
+              <span
+                className={`inline-flex px-3 py-1 rounded-full text-xs border ${getStatusStyle(
+                  complaint.status
+                )}`}
+              >
+                {complaint.status}
+              </span>
             </div>
 
-            {/* Main information */}
-            <div>
-              <h3 className="m-0 mb-3">Información principal</h3>
-              <div className="space-y-2 bg-gray-50 border-2 border-gray-200 rounded-lg p-4">
-                <div className="flex">
-                  <span className="text-sm min-w-32">Categoría:</span>
-                  <span className="text-sm text-gray-600">
-                    {complaint.category}
-                  </span>
-                </div>
-                <div className="flex">
-                  <span className="text-sm min-w-32">Ubicación:</span>
-                  <span className="text-sm text-gray-600">
-                    {complaint.location}
-                  </span>
-                </div>
-                <div className="flex">
-                  <span className="text-sm min-w-32">Reportada por:</span>
-                  <span className="text-sm text-gray-600">
-                    {complaint.reportedBy}
-                  </span>
-                </div>
+            <div className="grid gap-3 md:grid-cols-2">
+              <div className="p-4 rounded-lg border border-gray-200 bg-gray-50 space-y-2">
+                <p className="text-xs text-gray-500 m-0">Categoría</p>
+                <p className="text-sm text-gray-800 m-0">{complaint.category}</p>
+              </div>
+              <div className="p-4 rounded-lg border border-gray-200 bg-gray-50 space-y-2">
+                <p className="text-xs text-gray-500 m-0">Reportada por</p>
+                <p className="text-sm text-gray-800 m-0">{complaint.reportedBy}</p>
+              </div>
+              <div className="p-4 rounded-lg border border-gray-200 bg-gray-50 space-y-2 md:col-span-2">
+                <p className="text-xs text-gray-500 m-0">Ubicación</p>
+                <p className="text-sm text-gray-800 m-0">{complaint.location}</p>
               </div>
             </div>
 
-            {/* Description */}
             <div>
-              <h3 className="m-0 mb-3">Descripción</h3>
-              <div className="border-2 border-gray-200 rounded-lg p-4 bg-white">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Descripción</h3>
+              <div className="border border-gray-200 rounded-lg p-4 bg-white">
                 <p className="text-sm text-gray-700 m-0 leading-relaxed">
                   {complaint.description}
                 </p>
               </div>
             </div>
+          </div>
 
-            {/* Update history */}
-            <div>
-              <h3 className="m-0 mb-3">Historial de actualizaciones</h3>
-              <div className="space-y-3">
-                {updates.map((update, index) => (
-                  <div
-                    key={index}
-                    className="border-2 border-gray-200 rounded-lg p-3 bg-gray-50 relative pl-6"
-                  >
-                    <div className="absolute left-3 top-4 w-2 h-2 bg-gray-400 rounded-full" />
-                    <div className="flex items-baseline justify-between mb-1">
-                      <span className="text-xs text-gray-500">
-                        {update.date}
-                      </span>
-                      <span className="text-xs px-2 py-1 bg-white border border-gray-300 rounded">
-                        {update.status}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-700 m-0">
-                      {update.note}
-                    </p>
+          <div className="border border-gray-200 rounded-xl bg-white p-6 shadow-sm space-y-4">
+            <h3 className="text-base font-semibold text-gray-900 m-0">
+              Historial de actualizaciones
+            </h3>
+            <div className="space-y-3">
+              {updates.map((update, index) => (
+                <div
+                  key={index}
+                  className="border border-gray-200 rounded-lg p-3 bg-gray-50"
+                >
+                  <div className="flex items-baseline justify-between mb-1">
+                    <span className="text-xs text-gray-500">{update.date}</span>
+                    <span className="text-xs px-2 py-1 bg-white border border-gray-300 rounded">
+                      {update.status}
+                    </span>
                   </div>
-                ))}
-              </div>
+                  <p className="text-sm text-gray-700 m-0">{update.note}</p>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Comments */}
-            <div>
-              <h3 className="m-0 mb-3">Comentarios</h3>
-              <div className="space-y-3">
-                {comments.map((comment, index) => (
-                  <div
-                    key={index}
-                    className="border-2 border-gray-200 rounded-lg p-3 bg-white"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs px-2 py-1 bg-gray-800 text-white rounded">
-                        {comment.author}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {comment.date}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-700 m-0">
-                      {comment.text}
-                    </p>
+          <div className="border border-gray-200 rounded-xl bg-white p-6 shadow-sm space-y-3">
+            <h3 className="text-base font-semibold text-gray-900 m-0">Comentarios</h3>
+            <div className="space-y-3">
+              {comments.map((comment, index) => (
+                <div
+                  key={index}
+                  className="border border-gray-200 rounded-lg p-3 bg-white"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs px-2 py-1 bg-gray-900 text-white rounded">
+                      {comment.author}
+                    </span>
+                    <span className="text-xs text-gray-500">{comment.date}</span>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Action buttons */}
-            <div className="space-y-3 pt-4">
-              <button
-                onClick={onAddComment}
-                className="w-full h-12 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
-              >
-                <MessageSquare className="w-4 h-4" />
-                <span>Agregar comentario</span>
-              </button>
-              <button
-                onClick={onAddEvidence}
-                className="w-full h-12 bg-white border-2 border-gray-400 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
-              >
-                <Upload className="w-4 h-4" />
-                <span>Agregar evidencia</span>
-              </button>
-              <button
-                onClick={onBack}
-                className="w-full h-12 text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                Volver
-              </button>
+                  <p className="text-sm text-gray-700 m-0">{comment.text}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Anotaciones (fuera del teléfono si showFrameMeta = true) */}
-      {showFrameMeta && (
-        <div className="mt-4 px-4 space-y-2 text-sm text-gray-600">
-          <p className="flex items-start">
-            <span className="mr-2">•</span>
-            <span>
-              Esta pantalla muestra toda la información detallada de una denuncia
-              específica.
-            </span>
-          </p>
-          <p className="flex items-start">
-            <span className="mr-2">•</span>
-            <span>
-              La sección &apos;Historial de actualizaciones&apos; resume los
-              cambios de estado realizados por el municipio.
-            </span>
-          </p>
-          <p className="flex items-start">
-            <span className="mr-2">•</span>
-            <span>
-              El botón &apos;Agregar comentario&apos; permite al ciudadano enviar
-              nueva información o feedback.
-            </span>
-          </p>
-          <p className="flex items-start">
-            <span className="mr-2">•</span>
-            <span>
-              El botón &apos;Agregar evidencia&apos; permite subir nuevas fotos o
-              videos relacionados con el problema.
-            </span>
-          </p>
-          <p className="flex items-start">
-            <span className="mr-2">•</span>
-            <span>
-              El botón &apos;Volver&apos; regresa a la lista de denuncias del
-              ciudadano.
-            </span>
-          </p>
+        <div className="space-y-4">
+          <div className="border border-gray-200 rounded-xl bg-white p-5 shadow-sm space-y-3">
+            <h3 className="text-base font-semibold text-gray-900 m-0">Acciones</h3>
+            <p className="text-sm text-gray-600 m-0">
+              Envía comentarios o agrega evidencia adicional para acelerar la atención.
+            </p>
+            <button
+              onClick={onAddComment}
+              className="w-full h-11 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+            >
+              <MessageSquare className="w-4 h-4" /> Agregar comentario
+            </button>
+            <button
+              onClick={onAddEvidence}
+              className="w-full h-11 bg-white border border-gray-300 text-gray-800 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+            >
+              <Upload className="w-4 h-4" /> Subir evidencia
+            </button>
+            <button
+              onClick={onBack}
+              className="w-full h-11 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Volver al listado
+            </button>
+          </div>
+
+          <div className="border border-gray-200 rounded-xl bg-white p-5 shadow-sm space-y-3">
+            <h3 className="text-base font-semibold text-gray-900 m-0">Estado y comunicación</h3>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li>Recibe alertas de cambios de estado en tu correo.</li>
+              <li>Coordina con funcionarios desde la sección de comentarios.</li>
+              <li>Sigue el progreso sin necesidad de una vista móvil simulada.</li>
+            </ul>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
