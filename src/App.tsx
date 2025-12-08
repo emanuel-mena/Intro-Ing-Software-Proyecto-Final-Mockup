@@ -31,6 +31,7 @@ type Role = "ciudadano" | "funcionario" | "administrador" | null;
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("login");
   const [role, setRole] = useState<Role>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const goTo = (screen: Screen) => setCurrentScreen(screen);
 
@@ -38,7 +39,7 @@ export default function App() {
     () => [
       {
         label: "Login / Registro",
-        items: [{ id: "login" as const, label: "Ingreso" }]
+        items: [{ id: "login" as const, label: "Ingreso" }],
       },
       {
         label: "Ciudadano",
@@ -46,16 +47,16 @@ export default function App() {
           { id: "ciudadanoHome" as const, label: "Home ciudadano" },
           { id: "ciudadanoCrear" as const, label: "Crear denuncia" },
           { id: "ciudadanoDetalle" as const, label: "Detalle denuncia" },
-          { id: "ciudadanoPerfil" as const, label: "Perfil" }
-        ]
+          { id: "ciudadanoPerfil" as const, label: "Perfil" },
+        ],
       },
       {
         label: "Funcionario",
         items: [
           { id: "funcionarioLista" as const, label: "Lista de denuncias" },
           { id: "funcionarioGestion" as const, label: "Gestión de denuncia" },
-          { id: "funcionarioHistorial" as const, label: "Historial / cambios" }
-        ]
+          { id: "funcionarioHistorial" as const, label: "Historial / cambios" },
+        ],
       },
       {
         label: "Administrador",
@@ -63,9 +64,9 @@ export default function App() {
           { id: "adminDashboard" as const, label: "Dashboard" },
           { id: "mapa" as const, label: "Mapa de denuncias" },
           { id: "config" as const, label: "Configuración" },
-          { id: "adminUsuarios" as const, label: "Usuarios / permisos" }
-        ]
-      }
+          { id: "adminUsuarios" as const, label: "Usuarios / permisos" },
+        ],
+      },
     ],
     []
   );
@@ -197,43 +198,69 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-100">
-      <header className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-wrap items-center gap-4 justify-between">
+    <div className="min-h-screen bg-neutral-100 relative">
+      {/* Header fijo con botón para abrir el menú */}
+      <header className="bg-white border-b border-gray-200 shadow-sm relative z-40">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-wide text-gray-500 m-0">Prototipo</p>
-            <h1 className="text-lg font-semibold text-gray-900 m-0">ComuniApp</h1>
+            <p className="text-xs uppercase tracking-wide text-gray-500 m-0">
+              Prototipo
+            </p>
+            <h1 className="text-lg font-semibold text-gray-900 m-0">
+              ComuniApp
+            </h1>
             <p className="text-xs text-gray-500 m-0">
-              Acceso actual: {role ? role.charAt(0).toUpperCase() + role.slice(1) : "no autenticado"}
+              Acceso actual:{" "}
+              {role
+                ? role.charAt(0).toUpperCase() + role.slice(1)
+                : "no autenticado"}
             </p>
           </div>
-          <nav className="flex flex-wrap gap-3 items-center text-sm">
-            {navigation.map((section) => (
-              <div key={section.label} className="flex items-center gap-2">
-                <span className="text-gray-500 font-medium whitespace-nowrap">
-                  {section.label}
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  {section.items.map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => goTo(item.id)}
-                      className={`px-3 py-2 rounded-lg border transition-colors ${
-                        currentScreen === item.id
-                          ? "bg-gray-900 text-white border-gray-900"
-                          : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </nav>
+
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-800 text-sm shadow-sm hover:bg-gray-50 transition-colors"
+          >
+            {isMenuOpen ? "Cerrar menú de pantallas" : "Abrir menú de pantallas"}
+          </button>
         </div>
+
+        {/* Menú desplegable flotante */}
+        {isMenuOpen && (
+          <nav className="absolute inset-x-0 top-full z-50 bg-white border-b border-gray-200 shadow-lg">
+            <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-4 text-sm">
+              {navigation.map((section) => (
+                <div key={section.label} className="flex flex-col gap-2">
+                  <span className="text-gray-500 font-semibold">
+                    {section.label}
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {section.items.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          goTo(item.id);
+                          setIsMenuOpen(false); // cerrar menú al seleccionar
+                        }}
+                        className={`px-3 py-2 rounded-lg border transition-colors ${
+                          currentScreen === item.id
+                            ? "bg-gray-900 text-white border-gray-900"
+                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </nav>
+        )}
       </header>
 
+      {/* Contenido principal (no se mueve, el menú flota encima) */}
       <main className="max-w-6xl mx-auto px-4 py-8">{renderScreen()}</main>
     </div>
   );
