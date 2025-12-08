@@ -1,172 +1,144 @@
 import { useState } from "react";
 
+type Role = "ciudadano" | "funcionario" | "administrador";
+
 interface LoginWireframeProps {
-  onLogin?: () => void;
+  onLogin?: (role: Role) => void;
+  onRegister?: () => void;
   /** Muestra el nombre del frame y las anotaciones fuera de la “pantalla”. */
   showFrameMeta?: boolean;
 }
 
 export function LoginWireframe({
   onLogin,
+  onRegister,
   showFrameMeta = false,
 }: LoginWireframeProps) {
-  const [selectedRole, setSelectedRole] = useState<"ciudadano" | "funcionario">(
-    "ciudadano"
-  );
+  const [selectedRole, setSelectedRole] = useState<Role>("ciudadano");
 
   return (
-    <div className="w-full h-full flex flex-col">
-      {/* Frame label (fuera de la “pantalla” del teléfono) */}
+    <div className="space-y-8">
       {showFrameMeta && (
-        <div className="mb-4 text-center">
-          <span className="text-sm text-gray-400">LoginRegistro_ComuniApp</span>
-        </div>
+        <p className="text-sm text-gray-500">LoginRegistro_ComuniApp</p>
       )}
 
-      {/* Contenido principal de la pantalla */}
-      <div className="flex-1">
-        <div className="w-full h-full px-4 py-6">
-          <div className="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6">
-            {/* Logo placeholder */}
-            <div className="flex justify-center mb-8">
-              <div className="w-20 h-20 border-2 border-dashed border-gray-400 rounded-lg flex items-center justify-center">
+      <div className="grid gap-8 lg:grid-cols-2 items-center">
+        <div className="space-y-4">
+          <p className="inline-flex rounded-full bg-gray-200 text-gray-700 px-3 py-1 text-xs uppercase tracking-wide">
+            Acceso a la plataforma
+          </p>
+          <h1 className="text-3xl font-semibold text-gray-900 leading-tight">
+            Bienvenido a ComuniApp
+          </h1>
+          <p className="text-gray-600 leading-relaxed">
+            Inicia sesión para crear y dar seguimiento a denuncias ciudadanas. Elige tu
+            rol para ajustar las acciones y navegación disponibles.
+          </p>
+          <ul className="space-y-2 text-sm text-gray-600">
+            <li className="flex items-start gap-2">
+              <span className="mt-1 h-2 w-2 rounded-full bg-gray-700" />
+              <span>
+                Usuarios ciudadanos pueden crear, consultar y comentar denuncias.
+              </span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1 h-2 w-2 rounded-full bg-gray-700" />
+              <span>Funcionarios gestionan el avance y comparten actualizaciones.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 border-2 border-dashed border-gray-400 rounded-lg flex items-center justify-center">
                 <span className="text-xs text-gray-400">LOGO</span>
               </div>
-            </div>
-
-            {/* Title */}
-            <h1 className="text-center mb-3">Iniciar sesión</h1>
-
-            {/* Subtitle */}
-            <p className="text-center text-gray-500 mb-6">
-              Bienvenido a ComuniApp
-            </p>
-
-            {/* Form card */}
-            <div className="bg-gray-50 rounded-lg p-4 mb-6">
-              {/* Email input */}
-              <div className="mb-4">
-                <label className="block text-sm mb-2 text-gray-700">
-                  Correo electrónico
-                </label>
-                <div className="h-12 border-2 border-gray-300 rounded-lg bg-white flex items-center px-3">
-                  <span className="text-sm text-gray-400">
-                    email@ejemplo.com
-                  </span>
-                </div>
-              </div>
-
-              {/* Password input */}
               <div>
-                <label className="block text-sm mb-2 text-gray-700">
-                  Contraseña
-                </label>
-                <div className="h-12 border-2 border-gray-300 rounded-lg bg-white flex items-center px-3">
-                  <span className="text-sm text-gray-400">••••••••</span>
-                </div>
+                <h2 className="text-xl font-semibold text-gray-900 m-0">Iniciar sesión</h2>
+                <p className="text-sm text-gray-500 m-0">
+                  Ingresa tus credenciales para continuar
+                </p>
+              </div>
+            </div>
+            <div className="hidden md:flex border border-gray-200 rounded-lg overflow-hidden text-sm">
+              {["ciudadano", "funcionario", "administrador"].map((role) => (
+                <button
+                  key={role}
+                  onClick={() => setSelectedRole(role as Role)}
+                  className={`px-3 py-2 transition-colors ${
+                    selectedRole === role
+                      ? "bg-gray-900 text-white"
+                      : "bg-white text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  {role.charAt(0).toUpperCase() + role.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            <div>
+              <label className="block text-sm mb-2 text-gray-700">Correo electrónico</label>
+              <div className="h-12 border border-gray-300 rounded-lg bg-white flex items-center px-3">
+                <span className="text-sm text-gray-400">email@ejemplo.com</span>
               </div>
             </div>
 
-            {/* Primary button - Ingresar */}
+            <div>
+              <label className="block text-sm mb-2 text-gray-700">Contraseña</label>
+              <div className="h-12 border border-gray-300 rounded-lg bg-white flex items-center px-3">
+                <span className="text-sm text-gray-400">••••••••</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3">
             <button
-              onClick={onLogin}
-              className="w-full h-12 bg-gray-800 text-white rounded-lg mb-6 hover:bg-gray-700 transition-colors"
+              onClick={() => onLogin?.(selectedRole)}
+              className="w-full h-12 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
             >
               Ingresar
             </button>
-
-            {/* Separator */}
-            <div className="flex items-center mb-4">
-              <div className="flex-1 border-t border-gray-300" />
-              <span className="px-4 text-sm text-gray-500">
-                ¿No tienes cuenta?
-              </span>
-              <div className="flex-1 border-t border-gray-300" />
-            </div>
-
-            {/* Secondary button - Registrarse */}
-            <button className="w-full h-12 bg-white border-2 border-gray-400 text-gray-700 rounded-lg mb-6 hover:bg-gray-50 transition-colors">
+            <button
+              onClick={onRegister}
+              className="w-full h-12 bg-white border border-gray-300 text-gray-800 rounded-lg hover:bg-gray-50 transition-colors"
+            >
               Registrarse
             </button>
+          </div>
 
-            {/* Role selector toggle */}
-            <div className="mb-6">
-              <div className="flex border-2 border-gray-300 rounded-lg overflow-hidden">
+          <div className="flex items-center justify-between text-sm text-gray-600 flex-wrap gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-gray-500">Rol seleccionado:</span>
+              <span className="font-medium text-gray-900 capitalize">{selectedRole}</span>
+            </div>
+            <a href="#" className="underline hover:text-gray-800">
+              ¿Olvidaste tu contraseña?
+            </a>
+          </div>
+
+          <div className="md:hidden">
+            <p className="text-sm text-gray-600 mb-2">Elige tu rol</p>
+            <div className="grid grid-cols-2 gap-3">
+              {["ciudadano", "funcionario", "administrador"].map((role) => (
                 <button
-                  onClick={() => setSelectedRole("ciudadano")}
-                  className={`flex-1 h-12 transition-colors ${
-                    selectedRole === "ciudadano"
-                      ? "bg-gray-800 text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-50"
+                  key={role}
+                  onClick={() => setSelectedRole(role as Role)}
+                  className={`h-12 rounded-lg border transition-colors ${
+                    selectedRole === role
+                      ? "bg-gray-900 text-white border-gray-900"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                   }`}
                 >
-                  Ciudadano
+                  {role.charAt(0).toUpperCase() + role.slice(1)}
                 </button>
-                <button
-                  onClick={() => setSelectedRole("funcionario")}
-                  className={`flex-1 h-12 transition-colors ${
-                    selectedRole === "funcionario"
-                      ? "bg-gray-800 text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  Funcionario
-                </button>
-              </div>
-            </div>
-
-            {/* Forgot password link */}
-            <div className="text-center mb-2">
-              <a
-                href="#"
-                className="text-sm text-gray-600 underline hover:text-gray-800"
-              >
-                ¿Olvidaste tu contraseña?
-              </a>
-            </div>
-
-            {/* Footer placeholder */}
-            <div className="border-t-2 border-dashed border-gray-300 pt-4 mt-4">
-              <div className="h-8 bg-gray-100 rounded flex items-center justify-center">
-                <span className="text-xs text-gray-400">
-                  Footer - Texto legal
-                </span>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-
-      {/* Annotations (también fuera del “teléfono” si showFrameMeta = true) */}
-      {showFrameMeta && (
-        <div className="mt-4 px-4 space-y-2 text-sm text-gray-600">
-          <p className="flex items-start">
-            <span className="mr-2">•</span>
-            <span>
-              El botón &apos;Ingresar&apos; valida el correo y contraseña.
-            </span>
-          </p>
-          <p className="flex items-start">
-            <span className="mr-2">•</span>
-            <span>
-              El botón &apos;Registrarse&apos; abre la pantalla de registro.
-            </span>
-          </p>
-          <p className="flex items-start">
-            <span className="mr-2">•</span>
-            <span>
-              El selector define si el usuario es Ciudadano o Funcionario.
-            </span>
-          </p>
-          <p className="flex items-start">
-            <span className="mr-2">•</span>
-            <span>
-              El enlace &apos;¿Olvidaste tu contraseña?&apos; lleva al flujo de
-              recuperación.
-            </span>
-          </p>
-        </div>
-      )}
     </div>
   );
 }

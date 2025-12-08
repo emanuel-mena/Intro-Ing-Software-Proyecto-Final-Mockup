@@ -3,12 +3,14 @@ import { Map, Settings } from "lucide-react";
 interface DashboardAdminWireframeProps {
   onViewMap?: () => void;
   onOpenConfig?: () => void;
+  onManageUsers?: () => void;
   showFrameMeta?: boolean;
 }
 
 export function DashboardAdminWireframe({
   onViewMap,
   onOpenConfig,
+  onManageUsers,
   showFrameMeta = true
 }: DashboardAdminWireframeProps) {
   const kpis = [
@@ -84,24 +86,31 @@ export function DashboardAdminWireframe({
             {/* Accesos rápidos */}
             <div>
               <h3 className="m-0 mb-3">Accesos rápidos</h3>
-              <div className="space-y-3">
-                <button
-                  onClick={onViewMap}
+            <div className="space-y-3">
+              <button
+                onClick={onViewMap}
                   className="w-full h-12 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
                 >
                   <Map className="w-4 h-4" />
                   <span>Ver mapa de denuncias</span>
                 </button>
-                <button
-                  onClick={onOpenConfig}
-                  className="w-full h-12 bg-white border-2 border-gray-400 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
-                >
-                  <Settings className="w-4 h-4" />
-                  <span>Configuración del sistema</span>
-                </button>
-              </div>
+              <button
+                onClick={onOpenConfig}
+                className="w-full h-12 bg-white border-2 border-gray-400 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+              >
+                <Settings className="w-4 h-4" />
+                <span>Configuración del sistema</span>
+              </button>
+              <button
+                onClick={onManageUsers}
+                className="w-full h-12 bg-white border-2 border-gray-400 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+              >
+                <span className="text-lg leading-none">👥</span>
+                <span>Usuarios y permisos</span>
+              </button>
             </div>
           </div>
+        </div>
         </div>
       </div>
 
