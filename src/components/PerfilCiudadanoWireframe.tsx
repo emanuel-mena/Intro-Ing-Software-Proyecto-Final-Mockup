@@ -56,7 +56,7 @@ export function PerfilCiudadanoWireframe({
             <div className="space-y-2">
               <p className="text-sm text-gray-600 m-0">Municipio</p>
               <div className="h-12 border border-gray-200 rounded-lg bg-gray-50 flex items-center px-3 text-gray-800">
-                Ciudad de México
+                San José
               </div>
             </div>
           </section>
